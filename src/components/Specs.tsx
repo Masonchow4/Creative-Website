@@ -5,15 +5,15 @@ import {onFrame} from '../lib/scroll';
 import {CurveEdge} from './CurveEdge';
 
 /**
- * The specification as an instrument cluster. The section pins while a
- * tachometer needle sweeps toward the redline with the scroll; each figure
+ * The product story as a retro instrument cluster. The section pins while a
+ * color needle sweeps with the scroll; each figure
  * takes the centre of the dial in turn and counts up to its reading, the
  * list beside it follows, and five shift lights fire as the needle nears
  * the red — flashing once it's in.
  */
 
 const SECTION_VH = 420;
-const START = -225; // dial angle for 0 rpm (degrees, 0 = east)
+const START = -225; // starting dial angle (degrees, 0 = east)
 const SWEEP = 270;
 const MAX_RPM = 8;
 const REDLINE = 7;
@@ -53,7 +53,7 @@ function Dial({needleRef, arcRef}: {needleRef: RefObject<SVGGElement | null>; ar
       <path ref={arcRef} d={`M${s0.x} ${s0.y} A176 176 0 1 1 ${full.x} ${full.y}`} pathLength={1} fill="none" stroke="var(--color-brass)" strokeWidth="2" strokeDasharray="1 1" strokeDashoffset="1" opacity="0.9" />
       {ticks}
       <text x="200" y="300" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="11" letterSpacing="3" fill="rgb(241 236 227 / 0.45)">
-        RPM × 1000
+        STYLE INDEX
       </text>
       <g ref={needleRef} style={{transformOrigin: '200px 200px'}}>
         <line x1="200" y1="200" x2="200" y2="48" stroke="#e8d6b5" strokeWidth="3" strokeLinecap="round" />
@@ -70,7 +70,7 @@ export function Specs() {
   const arcRef = useRef<SVGPathElement>(null);
   const valueRef = useRef<HTMLSpanElement>(null);
   const ledRefs = useRef<HTMLSpanElement[]>([]);
-  const rpmRef = useRef<HTMLSpanElement>(null);
+  const indexRef = useRef<HTMLSpanElement>(null);
   const [active, setActive] = useState(0);
   const n = specs.items.length;
 
@@ -85,17 +85,16 @@ export function Specs() {
       if (rect.bottom < 0 || rect.top > vh) return;
 
       const u = range(p, 0.05, 0.92);
-      const rpm = lerp(0.8, 7.35, easeOutCubic(u));
-      const inRed = rpm >= REDLINE;
-      // A little needle chatter at the redline, every frame.
+      const index = lerp(0.8, 7.35, easeOutCubic(u));
+      const inRed = index >= REDLINE;
       const chatter = inRed ? Math.sin(time * 0.06) * 0.6 : 0;
-      needleRef.current!.style.transform = `rotate(${(rpm / MAX_RPM) * SWEEP - 135 + chatter}deg)`;
+      needleRef.current!.style.transform = `rotate(${(index / MAX_RPM) * SWEEP - 135 + chatter}deg)`;
 
       if (Math.abs(p - lastP) < 0.00005) return;
       lastP = p;
 
-      arcRef.current!.style.strokeDashoffset = String(1 - rpm / MAX_RPM);
-      rpmRef.current!.textContent = Math.round(rpm * 1000).toLocaleString('en-US');
+      arcRef.current!.style.strokeDashoffset = String(1 - index / MAX_RPM);
+      indexRef.current!.textContent = `${Math.round((index / MAX_RPM) * 100)}%`;
 
       const idx = clamp(Math.floor(u * n), 0, n - 1);
       if (idx !== current) {
@@ -107,7 +106,7 @@ export function Specs() {
       valueRef.current!.textContent = fmt(item.value * easeOutCubic(clamp(local / 0.55)), item.decimals);
 
       ledRefs.current.forEach((led, i) => {
-        const on = rpm >= 5.4 + i * 0.35;
+        const on = index >= 5.4 + i * 0.35;
         led.style.opacity = on ? '1' : '0.15';
         led.style.backgroundColor = i >= 3 ? '#c9535c' : '#e8c46a';
       });
@@ -148,7 +147,7 @@ export function Specs() {
             </div>
           </div>
           <p className="mt-3 text-center font-mono text-[0.625rem] tracking-[0.16em] text-chalk/45 uppercase" aria-hidden="true">
-            <span ref={rpmRef}>800</span> rpm
+            <span ref={indexRef}>10%</span> style index
           </p>
         </div>
 

@@ -1,10 +1,10 @@
 import {useEffect, useRef, useState} from 'react';
-import {details} from '../content';
+import {details, productImage} from '../content';
 import {clamp, easeOutCubic, lerp, pinProgress, range, smoothstep} from '../lib/math';
 import {onFrame, scrollToY} from '../lib/scroll';
 
 /**
- * The exhibit tour. The revealed car fills the screen and the scroll works
+ * The exhibit tour. The revealed patch fills the screen and the scroll works
  * the camera: it pushes in on each detail, holds, then eases out, travels
  * and eases back in to the next — a pull-back curve between every stop, the
  * way a camera operator would do it. A reticle locks on at each stop, a
@@ -12,7 +12,7 @@ import {onFrame, scrollToY} from '../lib/scroll';
  */
 
 const SECTION_VH = 520;
-const IMG = {w: 2400, h: 1361};
+const IMG = {w: 402, h: 631};
 const ZOOM = 2.3;
 
 export function Details() {
@@ -132,8 +132,8 @@ export function Details() {
   return (
     <section ref={rootRef} id="details" aria-labelledby="details-title" className="relative bg-ink" style={{height: `${SECTION_VH}svh`}}>
       <div className="sticky top-0 h-screen-s overflow-hidden">
-        <div ref={plateRef} className="absolute top-0 left-0 origin-top-left will-change-transform" style={{width: 'max(100vw, calc(100svh * 2400 / 1361))'}}>
-          <img src={`${import.meta.env.BASE_URL}media/revealed.webp`} alt="The Valmora Alba GT in the museum hall." width={IMG.w} height={IMG.h} decoding="async" className="block h-auto w-full" />
+        <div ref={plateRef} className="absolute top-0 left-0 origin-top-left will-change-transform" style={{width: 'max(42vw, calc(100svh * 402 / 631))'}}>
+          <img src={productImage} alt="The Google Lava Lamp Patch, embroidered with bright retro colors." width={IMG.w} height={IMG.h} decoding="async" className="block h-auto w-full" />
         </div>
         <div ref={shadeRef} aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent_45%,rgb(12_11_10/0.85)_78%)] max-md:bg-[linear-gradient(180deg,transparent_45%,rgb(12_11_10/0.9)_70%)]" />
 

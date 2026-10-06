@@ -8,10 +8,11 @@ import {CurveEdge} from './CurveEdge';
 
 type Status = 'idle' | 'invalid' | 'sent';
 
-/** Request an invitation. The linen from the hero returns as the background. */
+/** Let visitors sketch their relaunch customization locally. */
 export function Enquire() {
   const ref = useReveals<HTMLElement>();
   const [status, setStatus] = useState<Status>('idle');
+  const [summary, setSummary] = useState('');
   const markRef = useFitText<HTMLSpanElement>();
   const letterRefs = useRef<HTMLSpanElement[]>([]);
 
@@ -44,10 +45,11 @@ export function Enquire() {
       return;
     }
     const d = new FormData(form);
-    const subject = encodeURIComponent(`Private viewing — ${String(d.get('name'))}`);
-    const body = encodeURIComponent(`Name: ${String(d.get('name'))}\nEmail: ${String(d.get('email'))}\nInterest: ${String(d.get('edition'))}\n\n${String(d.get('note') || '')}`);
-    window.location.href = `mailto:${brand.email}?subject=${subject}&body=${body}`;
+    const initials = String(d.get('initials')).toUpperCase();
+    const palette = String(d.get('palette'));
+    const student = d.get('student') ? ' Student offer selected.' : '';
     setStatus('sent');
+    setSummary(`Your concept: ${palette}, initials ${initials}.${student} Saved in this preview only.`);
   };
 
   const field =
@@ -78,20 +80,20 @@ export function Enquire() {
         <form noValidate onSubmit={onSubmit} aria-describedby="enquire-status" className="space-y-5 md:col-span-6 md:col-start-7" data-reveal>
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="block">
-              <span className="font-mono text-label text-ink/55 uppercase">Name</span>
-              <input name="name" required autoComplete="name" placeholder="Your name" className={field} onInput={() => setStatus('idle')} />
+              <span className="font-mono text-label text-ink/55 uppercase">Your initials</span>
+              <input name="initials" required minLength={1} maxLength={3} pattern="[A-Za-z]{1,3}" placeholder="M C" className={field} onInput={() => setStatus('idle')} />
             </label>
             <label className="block">
-              <span className="font-mono text-label text-ink/55 uppercase">Email</span>
-              <input name="email" type="email" required autoComplete="email" placeholder="you@domain.com" className={field} onInput={() => setStatus('idle')} />
+              <span className="font-mono text-label text-ink/55 uppercase">Student pricing</span>
+              <span className="mt-3 flex items-center gap-3 text-body text-ink/75"><input name="student" type="checkbox" className="size-4 accent-oxblood" /> I’m a high school or college student</span>
             </label>
           </div>
           <fieldset>
-            <legend className="font-mono text-label text-ink/55 uppercase">Interest</legend>
+            <legend className="font-mono text-label text-ink/55 uppercase">Choose a color direction</legend>
             <div className="mt-3 flex flex-wrap gap-2">
-              {enquire.editions.map((ed, i) => (
+              {enquire.palettes.map((ed, i) => (
                 <label key={ed} className="cursor-pointer">
-                  <input type="radio" name="edition" value={ed} defaultChecked={i === 0} className="peer sr-only" />
+                  <input type="radio" name="palette" value={ed} defaultChecked={i === 0} className="peer sr-only" />
                   <span className="block rounded-full px-4 py-2 text-[0.875rem] ring-1 ring-ink/25 transition-colors peer-checked:bg-ink peer-checked:text-linen peer-checked:ring-ink peer-focus-visible:outline peer-focus-visible:outline-oxblood">
                     {ed}
                   </span>
@@ -100,21 +102,19 @@ export function Enquire() {
             </div>
           </fieldset>
           <label className="block">
-            <span className="font-mono text-label text-ink/55 uppercase">Anything we should know</span>
-            <textarea name="note" rows={3} placeholder="A date that suits, a car you’ve loved…" className={`${field} resize-none`} />
+            <span className="font-mono text-label text-ink/55 uppercase">Color inspiration</span>
+            <textarea name="note" rows={3} placeholder="School colors, favorite colors, or a club to rep…" className={`${field} resize-none`} />
           </label>
           <div className="flex flex-wrap items-center gap-5 pt-2">
             <button type="submit" className="group flex items-center gap-3 rounded-full bg-oxblood px-7 py-4 font-mono text-label text-chalk uppercase transition-colors hover:bg-ink">
-              Request an invitation
+              Build my concept
               <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
             </button>
-            <a href={`mailto:${brand.email}`} className="font-mono text-label text-ink/60 uppercase underline-offset-4 hover:underline">
-              {brand.email}
-            </a>
+            <span className="font-mono text-label text-ink/60 uppercase">Student discount planned for relaunch</span>
           </div>
           <p id="enquire-status" role="status" className="min-h-[1.25rem] text-[0.8125rem] text-ink/70">
-            {status === 'invalid' && 'Your name and a valid email, please.'}
-            {status === 'sent' && `Your mail app should be open with the request drafted. If not: ${brand.email}.`}
+            {status === 'invalid' && 'Enter 1–3 letters for your initials.'}
+            {status === 'sent' && summary}
           </p>
         </form>
       </div>

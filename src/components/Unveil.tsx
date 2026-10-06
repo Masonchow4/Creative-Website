@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState, type PointerEvent as ReactPointerEvent} from 'react';
-import {unveil} from '../content';
+import {productImage, unveil} from '../content';
 import {useReducedMotion} from '../hooks/useReducedMotion';
-import {FRAME_COUNT, loadFrames, type FrameSet} from '../lib/frames';
+import {FRAME_COUNT} from '../lib/frames';
 import {clamp, easeOutCubic, lerp, pinProgress, range, smoothstep} from '../lib/math';
 import {onFrame, scrollToY} from '../lib/scroll';
 import {createRemap} from '../lib/timeRemap';
@@ -9,15 +9,11 @@ import {createRemap} from '../lib/timeRemap';
 /**
  * The unveiling — cut like a film, not scrubbed like a slider.
  *
- *   0.00 – 0.06  title card: REDISCOVER the CLASSICS, the arc, the handle
- *   0.03 – 0.88  the 21s film, speed-ramped: it lingers on the hero beats
- *                (headlamps through the linen, the grille uncovered, the
- *                sheet leaving the tail) and fast-forwards through the
- *                travelling shots, with eased ramps between them. Frames
- *                persist briefly at speed, which reads as motion blur.
+ *   0.00 – 0.06  title card and the arc handle
+ *   0.03 – 0.88  a scroll-paced linen reveal over the product photograph
  *                Letterbox bars close to 2.39:1 while it plays; chapter
  *                cards mark the three acts.
- *   0.86 – 1.00  name plate: VALMORA ALBA GT, 1961, the slogan
+ *   0.86 – 1.00  name plate and the product story
  */
 
 const STAGE_VH = 900;
@@ -29,22 +25,22 @@ const FPS = 24;
 const REMAP = createRemap(
   [
     [0, 0],
-    [0.11, 1.8], // hold: headlamps glowing through the linen
-    [0.21, 5.6], // fast-forward: the orbit toward the nose
-    [0.35, 8.4], // hold: the sheet leaves the grille, head-on
-    [0.45, 12.3], // fast-forward: down the flank
-    [0.62, 15.3], // hold: the linen billows off the tail
+    [0.11, 1.8],
+    [0.21, 5.6],
+    [0.35, 8.4],
+    [0.45, 12.3],
+    [0.62, 15.3],
     [0.74, 17.5],
-    [0.86, 19.5], // fast-forward: crane up and back
+    [0.86, 19.5],
     [1, 21], // settle
   ],
   DURATION,
 );
 
 const CHAPTERS = [
-  {at: 0.06, n: 'I', title: 'The veil'},
-  {at: 0.33, n: 'II', title: 'The line'},
-  {at: 0.6, n: 'III', title: 'Unveiled'},
+  {at: 0.06, n: 'I', title: 'Curiosity'},
+  {at: 0.33, n: 'II', title: 'Color'},
+  {at: 0.6, n: 'III', title: 'Your mark'},
 ];
 
 /** Arc geometry, as shares of the viewport. Angles in degrees, 0 = east. */
@@ -82,7 +78,7 @@ function Leader({progress, done}: {progress: number; done: boolean}) {
         </svg>
         <span className="wide absolute inset-0 grid place-items-center font-display text-[5rem] font-extralight text-chalk/90 tabular-nums">{n}</span>
       </div>
-      <p className="absolute bottom-10 font-mono text-[0.625rem] tracking-[0.2em] text-chalk/50 uppercase">Valmora · Reel 01 · {Math.round(progress * 100)}%</p>
+      <p className="absolute bottom-10 font-mono text-[0.625rem] tracking-[0.2em] text-chalk/50 uppercase">Google · Patch 01 · {Math.round(progress * 100)}%</p>
     </div>
   );
 }
@@ -97,7 +93,8 @@ export function Unveil() {
   const handleRef = useRef<HTMLButtonElement>(null);
   const plateRef = useRef<HTMLDivElement>(null);
   const lineRefs = useRef<HTMLElement[]>([]);
-  const yearRef = useRef<HTMLSpanElement>(null);
+  const badgeRef = useRef<HTMLSpanElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const hudRef = useRef<HTMLDivElement>(null);
   const timeRef = useRef<HTMLSpanElement>(null);
   const speedRef = useRef<HTMLParagraphElement>(null);
@@ -116,31 +113,19 @@ export function Unveil() {
   const frames = useRef<(HTMLImageElement | undefined)[]>(new Array(FRAME_COUNT));
   const dirty = useRef(true);
 
-  // Stream the reel; the leader counts down over the first coarse pass.
+  // Load the patch image once and reuse it across the scroll-paced reveal.
   useEffect(() => {
-    const set: FrameSet = window.matchMedia('(max-width: 767px)').matches ? 'm' : 'd';
-    const NEED = 18; // frame 0 + every 32nd frame ≈ enough to scrub anywhere
-    let count = 0;
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
+    let cancelled = false;
+    const img = new Image();
+    img.onload = () => {
+      if (cancelled) return;
+      frames.current.fill(img);
+      dirty.current = true;
       setLoad({progress: 1, done: true});
     };
-    const timeout = window.setTimeout(finish, 6000);
-    const cancel = loadFrames(set, (i, img) => {
-      frames.current[i] = img;
-      dirty.current = true;
-      count++;
-      if (!finished) {
-        setLoad({progress: Math.min(1, count / NEED), done: false});
-        if (count >= NEED) window.setTimeout(finish, 350);
-      }
-    });
-    return () => {
-      cancel();
-      window.clearTimeout(timeout);
-    };
+    img.onerror = () => setLoad({progress: 1, done: true});
+    img.src = productImage;
+    return () => { cancelled = true; };
   }, []);
 
   // Canvas backing store + arc geometry follow the viewport.
@@ -203,13 +188,18 @@ export function Unveil() {
       if (img && (dirty.current || img !== lastImg)) {
         const cw = canvas.width;
         const ch = canvas.height;
-        const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+        const maxWidth = cw * (canvas.clientWidth < 768 ? 0.62 : 0.42);
+        const s = Math.min(maxWidth / img.naturalWidth, (ch * 0.76) / img.naturalHeight);
         const w = img.naturalWidth * s;
         const h = img.naturalHeight * s;
         // Fast-forward: let the previous frame linger under this one.
         const persist = moving && !reducedRef.current ? clamp((speed - 1.15) * 0.45, 0, 0.5) : 0;
         ctx.globalAlpha = dirty.current ? 1 : 1 - persist;
-        ctx.drawImage(img, (cw - w) * 0.55, (ch - h) * 0.5, w, h);
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.fillStyle = '#0c0b0a';
+        ctx.fillRect(0, 0, cw, ch);
+        const x = (cw - w) * (canvas.clientWidth < 768 ? 0.5 : 0.68);
+        ctx.drawImage(img, x, (ch - h) * 0.51, w, h);
         ctx.globalAlpha = 1;
         lastImg = img;
         dirty.current = false;
@@ -224,6 +214,11 @@ export function Unveil() {
 
       if (Math.abs(p - lastP) < 0.00005 && !dragging.current) return;
       lastP = p;
+
+      // Pull back the linen reveal as the visitor scrolls through the story.
+      const reveal = smoothstep(range(p, 0.035, 0.42));
+      sheetRef.current!.style.transform = `translate3d(${reveal * 108}%, ${-reveal * 34}%, 0) rotate(${reveal * 8}deg) skewX(${reveal * -10}deg)`;
+      sheetRef.current!.style.opacity = String(1 - smoothstep(range(reveal, 0.72, 1)));
 
       // --- Title card. ---
       const out = range(p, 0.015, 0.07);
@@ -277,8 +272,8 @@ export function Unveil() {
         el.style.filter = k < 0.99 ? `blur(${(1 - k) * 12}px)` : '';
       });
       const yk = easeOutCubic(range(p, 0.88, 1));
-      yearRef.current!.style.opacity = String(yk * 0.55);
-      yearRef.current!.style.transform = `translate3d(${lerp(120, 0, yk)}px, 0, 0)`;
+      badgeRef.current!.style.opacity = String(yk * 0.55);
+      badgeRef.current!.style.transform = `translate3d(${lerp(120, 0, yk)}px, 0, 0)`;
     });
   }, []);
 
@@ -333,7 +328,8 @@ export function Unveil() {
     <section id="top" ref={rootRef} aria-label="The unveiling" className="relative" style={{height: `${STAGE_VH}svh`}}>
       <Leader progress={load.progress} done={load.done} />
       <div className="sticky top-0 h-screen-s overflow-hidden bg-ink">
-        <canvas ref={canvasRef} className="absolute inset-0 size-full" role="img" aria-label="An oxblood grand tourer being unveiled from under a linen sheet in a marble museum hall, the camera circling it." />
+        <canvas ref={canvasRef} className="absolute inset-0 size-full" role="img" aria-label="The colorful embroidered Google Lava Lamp Patch, revealed from under a linen sheet." />
+        <div ref={sheetRef} aria-hidden="true" className="pointer-events-none absolute inset-[-8%] z-[1] origin-top-left will-change-transform" style={{background: 'repeating-linear-gradient(97deg, rgb(0 0 0 / 0) 0 38px, rgb(0 0 0 / 0.1) 52px, rgb(255 255 255 / 0.18) 64px, rgb(0 0 0 / 0) 86px), repeating-linear-gradient(3deg, rgb(0 0 0 / 0.035) 0 1px, transparent 1px 3px), linear-gradient(170deg, #efe7d6, #d9ccb3 60%, #c8b99c)', boxShadow: '0 30px 80px rgb(0 0 0 / 0.5)'}} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_55%_55%,transparent_45%,rgb(12_11_10/0.7))]" />
         <div ref={flashRef} aria-hidden="true" className="pointer-events-none absolute inset-0 bg-chalk" style={{opacity: 0}} />
 
@@ -370,7 +366,7 @@ export function Unveil() {
             if (e.detail === 0) playReveal(); // keyboard activation only
           }}
           className="group absolute top-0 left-0 z-20 flex cursor-grab items-center gap-3 active:cursor-grabbing"
-          aria-label="Reveal the car"
+          aria-label="Reveal the Google Lava Lamp Patch"
         >
           <span className="relative grid size-5 place-items-center">
             <span className="absolute inset-0 animate-ping rounded-full bg-chalk/40 motion-reduce:animate-none" />
@@ -380,7 +376,7 @@ export function Unveil() {
         </button>
 
         {/* Title card — letters rise in once the leader clears. */}
-        <div ref={introRef} className="pointer-events-none absolute inset-x-4 top-[20svh] sm:inset-x-6 md:top-[22svh] md:left-[4vw]">
+        <div ref={introRef} className="pointer-events-none absolute inset-x-4 top-[20svh] z-[2] sm:inset-x-6 md:top-[22svh] md:left-[4vw]">
           <h1 className="text-hero font-extralight uppercase" aria-label={`${unveil.title[0]} ${unveil.title[1]}`}>
             <span className="wide block font-display" aria-hidden="true">
               {[...unveil.title[0]].map((ch, i) => (
@@ -394,17 +390,16 @@ export function Unveil() {
               ))}
             </span>
             <span aria-hidden="true" className={`block ${load.done ? 'animate-[fade-up_1.4s_cubic-bezier(0.2,0.7,0.1,1)_both] [animation-delay:0.95s]' : 'opacity-0'}`}>
-              <span className="font-serif text-[0.8em] normal-case italic">the </span>
-              <span className="wide font-display italic">{unveil.title[1].replace('the ', '')}</span>
+              <span className="wide font-display italic">{unveil.title[1]}</span>
             </span>
           </h1>
         </div>
-        <p ref={bodyRef} className="pointer-events-none absolute right-4 bottom-[16svh] max-w-[19rem] text-[0.8125rem] leading-relaxed text-chalk/70 sm:right-6 md:right-auto md:left-[46vw]">
+        <p ref={bodyRef} className="pointer-events-none absolute right-4 bottom-[16svh] z-[2] max-w-[19rem] text-[0.8125rem] leading-relaxed text-chalk/70 sm:right-6 md:right-auto md:left-[46vw]">
           {unveil.body}
         </p>
 
         {/* Name plate. */}
-        <div ref={plateRef} className="pointer-events-none absolute inset-0" style={{opacity: 0}}>
+        <div ref={plateRef} className="pointer-events-none absolute inset-0 z-[2]" style={{opacity: 0}}>
           <div className="absolute top-[17svh] left-4 sm:left-6 md:top-[19svh] md:left-[4vw]">
             <p
               ref={(el) => {
@@ -424,12 +419,12 @@ export function Unveil() {
             </h2>
           </div>
           <span
-            ref={yearRef}
+            ref={badgeRef}
             aria-hidden="true"
             className="wide absolute top-[26svh] right-4 font-display text-[clamp(4rem,12vw,12rem)] leading-none font-extralight text-transparent sm:right-6 md:right-[5vw]"
             style={{WebkitTextStroke: '1px rgb(241 236 227 / 0.7)'}}
           >
-            {unveil.year}
+            {unveil.badge}
           </span>
           <div className="absolute right-4 bottom-[11svh] text-right sm:right-6 md:top-[50svh] md:right-[4vw] md:bottom-auto">
             <p
@@ -459,7 +454,7 @@ export function Unveil() {
         {/* Timecode + speed-ramp readout. */}
         <div ref={hudRef} aria-hidden="true" className="pointer-events-none absolute top-[5.5rem] right-4 z-20 text-right font-mono text-[0.625rem] tracking-[0.16em] text-chalk/65 uppercase sm:right-6 md:right-[4vw]" style={{opacity: 0}}>
           <p>
-            Reel 01 · <span ref={timeRef}>00:00:00</span>
+            Patch 01 · <span ref={timeRef}>00:00:00</span>
           </p>
           <p ref={speedRef} className="mt-1 h-3 text-brass" />
         </div>

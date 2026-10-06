@@ -10,12 +10,12 @@ function go(e: MouseEvent<HTMLAnchorElement>, then?: () => void) {
   scrollToHash(hash);
 }
 
-/** The marque: a V drawn as two brass strokes meeting in a point. */
+/** A simple lava lamp mark, drawn in the template's brass line style. */
 function Mark({className = ''}: {className?: string}) {
   return (
-    <svg viewBox="0 0 28 20" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
-      <path d="M2 2 14 18 26 2" />
-      <path d="M8 2 14 10 20 2" opacity="0.55" />
+    <svg viewBox="0 0 20 28" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 2h6M8 2v5L4 20a5 5 0 0 0 5 6h2a5 5 0 0 0 5-6L12 7V2" />
+      <path d="M6 17h8M7 21c2-2 4 2 7 0" opacity="0.8" />
     </svg>
   );
 }
@@ -44,7 +44,7 @@ export function Header() {
             </a>
           ))}
           <a href="#enquire" onClick={(e) => go(e)} className="hidden font-mono text-[0.625rem] tracking-[0.16em] text-brass uppercase hover:text-chalk sm:block">
-            Private viewing
+            Design yours
           </a>
           <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} aria-controls="menu" aria-label={open ? 'Close menu' : 'Open menu'} className="flex h-8 w-8 flex-col items-end justify-center gap-[5px]">
             <span className={`h-px bg-chalk transition-all duration-300 ${open ? 'w-6 translate-y-[3px] rotate-45' : 'w-6'}`} />
@@ -53,7 +53,7 @@ export function Header() {
         </nav>
       </div>
       <div id="menu" inert={!open} className={`fixed inset-0 -z-10 flex flex-col justify-center gap-4 bg-ink/96 px-6 backdrop-blur-xl transition-opacity duration-500 md:px-[4vw] ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
-        {[...nav, {label: 'Private viewing', href: '#enquire'}].map((item, i) => (
+        {[...nav, {label: 'Design yours', href: '#enquire'}].map((item, i) => (
           <a key={item.href} href={item.href} onClick={(e) => go(e, () => setOpen(false))} className="group flex items-baseline gap-5">
             <span className="font-mono text-label text-brass">0{i + 1}</span>
             <span className="wide font-display text-[clamp(2rem,6vw,5rem)] leading-none font-extralight uppercase transition-transform duration-500 group-hover:translate-x-3">
@@ -72,11 +72,11 @@ export function Footer() {
       <div className="flex flex-col gap-4 border-t border-chalk/10 pt-8 font-mono text-[0.625rem] tracking-[0.14em] text-chalk/45 uppercase md:flex-row md:items-center md:justify-between">
         <span className="flex items-center gap-2.5 text-chalk/80">
           <Mark className="h-3 w-5 text-brass" />
-          {brand.wordmark} · a concept marque
+          {brand.wordmark} · patch relaunch concept
         </span>
-        <span>© {new Date().getFullYear()} · Car, specifications and imagery are illustrative</span>
+        <span>© {new Date().getFullYear()} · Student customization concept · Google wordmark belongs to Google</span>
         <a href="#top" onClick={(e) => go(e)} className="hover:text-chalk">
-          Back under the sheet ↑
+          Back to the top ↑
         </a>
       </div>
     </footer>

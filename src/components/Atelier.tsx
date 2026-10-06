@@ -46,7 +46,7 @@ export function Atelier() {
   return (
     <section ref={ref} id="atelier" aria-labelledby="atelier-title" className="relative bg-ink pb-24 md:pb-36">
       <CurveEdge color="var(--color-ink)" />
-      <Marquee text="Coachbuilt · Modena · MCMLXI · " />
+      <Marquee text="Retro science · STEM curious · Wear your wonder · " />
 
       <div className="px-4 sm:px-6 md:px-[4vw]" data-reveal>
         <p className="font-mono text-label text-brass uppercase">{atelier.eyebrow}</p>

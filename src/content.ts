@@ -1,86 +1,60 @@
-/**
- * Every word on the page. VALMORA is a concept marque — the car, its specs
- * and its history are illustrative, and the footer says so.
- */
+export const productImage = `${import.meta.env.BASE_URL}media/atelier/google-embroidery.png`;
 
 export const brand = {
-  name: 'Valmora',
-  wordmark: 'VALMORA',
-  tagline: ['A classic grand tourer', 'built as if 1961 never ended'],
-  email: 'atelier@valmora.it',
+  name: 'Google Lava Lamp Patch',
+  wordmark: 'GOOGLE',
+  tagline: ['A retro science patch', 'made personal'],
 };
 
 export const nav = [
-  {label: 'Design', href: '#details'},
-  {label: 'Specification', href: '#specs'},
-  {label: 'Atelier', href: '#atelier'},
+  {label: 'The details', href: '#details'},
+  {label: 'Make it yours', href: '#specs'},
+  {label: 'Student offer', href: '#enquire'},
 ];
 
 export const unveil = {
-  title: ['Rediscover', 'the classics'],
-  body: 'A grand tourer that spent sixty years under a dust sheet — and came out exactly as it was meant to be.',
-  handle: 'Drag to reveal',
-  model: ['Valmora', 'Alba GT'],
-  year: '1961',
-  slogan: ['Looks fast', 'standing still'],
-  note: 'Coachbuilt by hand in Modena. Twelve cars, each a year in the making.',
+  title: ['Wear your', 'wonder'],
+  body: 'A little lava-lamp throwback for curious minds. Bring color, character, and a spark of science to your everyday layer.',
+  handle: 'Drag to uncover',
+  model: ['Google', 'Lava Lamp Patch'],
+  badge: 'STEM',
+  slogan: ['Retro science', 'your signature'],
+  note: 'Choose school or favorite colors, add your initials, and claim student pricing at relaunch.',
 };
 
-export type Detail = {
-  id: string;
-  label: string;
-  title: string;
-  body: string;
-  /** Hotspot position over the revealed photograph, as % of its box. */
-  x: number;
-  y: number;
-  image: string;
-};
-
-export const details: {eyebrow: string; heading: string; items: Detail[]} = {
-  eyebrow: 'Design',
-  heading: 'Every line drawn once.',
+export const details = {
+  eyebrow: 'The design',
+  heading: 'A small patch with big lab energy.',
   items: [
-    {id: 'lamp', label: '01', title: 'Crystal headlamps', body: 'Hand-blown glass over polished reflector bowls. They warm up slowly, like a valve amplifier.', x: 77.2, y: 60.8, image: `${import.meta.env.BASE_URL}media/details/lamp.webp`},
-    {id: 'wheel', label: '02', title: '72-spoke wire wheels', body: 'Laced and trued by one craftsman. Centre-lock knock-offs, chromed three times.', x: 49.2, y: 70.6, image: `${import.meta.env.BASE_URL}media/details/wheel.webp`},
-    {id: 'cabin', label: '03', title: 'Quilted cabin', body: 'Cream Connolly-style hide, walnut and a wood-rim wheel. The clock is wound by hand.', x: 44.4, y: 49.5, image: `${import.meta.env.BASE_URL}media/details/cabin.webp`},
-    {id: 'vent', label: '04', title: 'Wing vents', body: 'Three chrome strakes that let the V12 breathe — and catch every light in the room.', x: 41.8, y: 60.4, image: `${import.meta.env.BASE_URL}media/details/vent.webp`},
+    {id: 'wordmark', label: '01', title: 'A familiar doodle', body: 'The bright Google wordmark brings playful color to a throwback patch, made for backpacks, jackets, and lab-day layers.', x: 50, y: 14, image: productImage},
+    {id: 'lamp', label: '02', title: 'Lava-lamp nostalgia', body: 'A wavy red lamp shape nods to classic science-room experiments and retro desk decor.', x: 50, y: 42, image: productImage},
+    {id: 'palette', label: '03', title: 'Color that stands out', body: 'Aqua, green, red, and yellow thread give this little science icon a bold, unmistakable pop.', x: 50, y: 69, image: productImage},
+    {id: 'thread', label: '04', title: 'Make it feel like you', body: 'The relaunch concept adds school or favorite colors and initials, so your patch can show your own corner of STEM.', x: 50, y: 88, image: productImage},
   ],
 };
 
 export const specs = {
-  eyebrow: 'Specification',
-  heading: 'Numbers from another time.',
-  note: 'Concept figures — illustrative.',
+  eyebrow: 'The formula',
+  heading: 'Your style, dialed in.',
+  note: 'Student pricing planned for relaunch · color personalization concept · one curious mind at a time',
   items: [
-    {value: 3.0, decimals: 1, unit: 'L', label: 'Naturally aspirated V12'},
-    {value: 286, decimals: 0, unit: 'hp', label: 'at 7,200 rpm'},
-    {value: 6.1, decimals: 1, unit: 's', label: '0–100 km/h'},
-    {value: 248, decimals: 0, unit: 'km/h', label: 'Top speed'},
-    {value: 1180, decimals: 0, unit: 'kg', label: 'Dry weight'},
-    {value: 12, decimals: 0, unit: '', label: 'Cars, ever'},
+    {value: 3, decimals: 0, unit: 'WAYS', label: 'To make it yours'},
+    {value: 18, decimals: 0, unit: '–30', label: 'Core student audience'},
+    {value: 1, decimals: 0, unit: 'PATCH', label: 'One science-minded statement'},
   ],
 };
 
 export const atelier = {
-  eyebrow: 'The atelier',
-  heading: ['Coachbuilt,', 'not manufactured.'],
+  eyebrow: 'The relaunch offer',
+  heading: ['Made for', 'the lab and beyond.'],
   steps: [
-    {n: '1,400', label: 'hours of hand-beaten aluminium', image: `${import.meta.env.BASE_URL}media/atelier/front.webp`},
-    {n: '11', label: 'coats of oxblood, rubbed back by hand', image: `${import.meta.env.BASE_URL}media/atelier/rear.webp`},
-    {
-      n: '',
-      label: 'Google embroidered patch',
-      image: `${import.meta.env.BASE_URL}media/atelier/google-embroidery.png`,
-      alt: 'A colorful embroidered patch beneath a Google wordmark.',
-      portrait: true,
-    },
+    {n: 'GO', label: 'A doodle, reborn in thread', image: productImage, alt: 'Colorful embroidered lava-lamp patch beneath a Google wordmark.', portrait: true},
   ],
 };
 
 export const enquire = {
-  eyebrow: 'Private viewing',
-  heading: ['The sheet comes off', 'once a month.'],
-  body: 'Viewings are held in the museum hall in Modena, by appointment. Tell us who you are and we’ll send an invitation.',
-  editions: ['Alba GT — Coupé', 'Alba GT — Spider (2027)', 'Just a viewing'],
+  eyebrow: 'Make it personal',
+  heading: ['Choose your colors.', 'Add your initials.'],
+  body: 'For high school and college STEM students aged 18–30 who want a retro science accessory with personality. Choose school colors or favorites, add initials, and get student pricing at relaunch.',
+  palettes: ['Classic Google colors', 'School colors', 'Favorite colors'],
 };
