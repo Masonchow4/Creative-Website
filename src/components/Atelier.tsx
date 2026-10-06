@@ -65,7 +65,7 @@ export function Atelier() {
             }}
             className={`relative ${s.portrait ? 'mx-auto w-full max-w-[26rem]' : i % 2 ? 'md:ml-[14vw]' : 'md:mr-[14vw]'}`}
           >
-            <div className={`relative overflow-hidden rounded-[6px] ${s.portrait ? 'aspect-[402/642]' : 'aspect-[16/10] md:aspect-[16/8.5]'}`}>
+            <div className={`relative overflow-hidden rounded-[6px] ${s.portrait ? 'aspect-[402/631]' : 'aspect-[16/10] md:aspect-[16/8.5]'}`}>
               <img
                 ref={(el) => {
                   if (el) imgRefs.current[i] = el;
@@ -73,7 +73,7 @@ export function Atelier() {
                 src={s.image}
                 alt={s.alt ?? ''}
                 width={s.portrait ? 402 : 1920}
-                height={s.portrait ? 642 : 1086}
+                height={s.portrait ? 631 : 1086}
                 loading="lazy"
                 decoding="async"
                 className="size-full object-cover will-change-transform"
