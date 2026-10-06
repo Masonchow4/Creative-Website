@@ -68,6 +68,13 @@ export const atelier = {
   steps: [
     {n: '1,400', label: 'hours of hand-beaten aluminium', image: `${import.meta.env.BASE_URL}media/atelier/front.webp`},
     {n: '11', label: 'coats of oxblood, rubbed back by hand', image: `${import.meta.env.BASE_URL}media/atelier/rear.webp`},
+    {
+      n: '',
+      label: 'Google embroidered patch',
+      image: `${import.meta.env.BASE_URL}media/atelier/google-embroidery.png`,
+      alt: 'A colorful embroidered patch beneath a Google wordmark.',
+      portrait: true,
+    },
   ],
 };
 

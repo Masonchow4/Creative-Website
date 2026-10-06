@@ -63,17 +63,17 @@ export function Atelier() {
             ref={(el) => {
               if (el) figRefs.current[i] = el;
             }}
-            className={`relative ${i % 2 ? 'md:ml-[14vw]' : 'md:mr-[14vw]'}`}
+            className={`relative ${s.portrait ? 'mx-auto w-full max-w-[26rem]' : i % 2 ? 'md:ml-[14vw]' : 'md:mr-[14vw]'}`}
           >
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[6px] md:aspect-[16/8.5]">
+            <div className={`relative overflow-hidden rounded-[6px] ${s.portrait ? 'aspect-[402/642]' : 'aspect-[16/10] md:aspect-[16/8.5]'}`}>
               <img
                 ref={(el) => {
                   if (el) imgRefs.current[i] = el;
                 }}
                 src={s.image}
-                alt=""
-                width={1920}
-                height={1086}
+                alt={s.alt ?? ''}
+                width={s.portrait ? 402 : 1920}
+                height={s.portrait ? 642 : 1086}
                 loading="lazy"
                 decoding="async"
                 className="size-full object-cover will-change-transform"
@@ -101,7 +101,7 @@ export function Atelier() {
               className={`absolute bottom-6 flex items-baseline gap-4 md:bottom-10 ${i % 2 ? 'right-6 md:right-10' : 'left-6 md:left-10'}`}
               style={{opacity: 0}}
             >
-              <span className="wide font-display text-[clamp(2.5rem,7vw,6.5rem)] leading-none font-extralight">{s.n}</span>
+              {s.n && <span className="wide font-display text-[clamp(2.5rem,7vw,6.5rem)] leading-none font-extralight">{s.n}</span>}
               <span className="max-w-[12rem] font-mono text-label text-chalk/80 uppercase">{s.label}</span>
             </figcaption>
           </figure>
