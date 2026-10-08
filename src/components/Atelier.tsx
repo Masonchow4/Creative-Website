@@ -76,7 +76,7 @@ export function Atelier() {
                 height={s.portrait ? 631 : 1086}
                 loading="lazy"
                 decoding="async"
-                className="size-full object-cover will-change-transform"
+                className={`size-full ${s.contain ? 'object-contain' : 'object-cover'} will-change-transform`}
                 style={{transform: 'scale(1.28)'}}
               />
               <div className="absolute inset-0 bg-linear-to-t from-ink/80 via-transparent to-transparent" />

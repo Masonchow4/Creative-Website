@@ -12,7 +12,7 @@ import {onFrame, scrollToY} from '../lib/scroll';
  */
 
 const SECTION_VH = 520;
-const IMG = {w: 402, h: 631};
+const IMG = {w: 931, h: 955};
 const ZOOM = 2.3;
 
 export function Details() {
@@ -132,8 +132,8 @@ export function Details() {
   return (
     <section ref={rootRef} id="details" aria-labelledby="details-title" className="relative bg-ink" style={{height: `${SECTION_VH}svh`}}>
       <div className="sticky top-0 h-screen-s overflow-hidden">
-        <div ref={plateRef} className="absolute top-0 left-0 origin-top-left will-change-transform" style={{width: 'max(42vw, calc(100svh * 402 / 631))'}}>
-          <img src={productImage} alt="The Google Lava Lamp Patch, embroidered with bright retro colors." width={IMG.w} height={IMG.h} decoding="async" className="block h-auto w-full" />
+        <div ref={plateRef} className="absolute top-0 left-0 origin-top-left will-change-transform" style={{width: 'max(42vw, calc(100svh * 931 / 955))'}}>
+          <img src={productImage} alt="A red lava lamp glowing against a dark background." width={IMG.w} height={IMG.h} decoding="async" className="block h-auto w-full" />
         </div>
         <div ref={shadeRef} aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent_45%,rgb(12_11_10/0.85)_78%)] max-md:bg-[linear-gradient(180deg,transparent_45%,rgb(12_11_10/0.9)_70%)]" />
 
@@ -167,7 +167,7 @@ export function Details() {
               <span className="font-mono text-label text-chalk/50 uppercase">/ 0{n}</span>
             </div>
             <div className="mt-4 overflow-hidden rounded-[4px] max-md:hidden">
-              <img src={item.image} alt={item.title} width={900} height={900} decoding="async" className="aspect-[4/3] w-full animate-[settle_1.8s_cubic-bezier(0.2,0.7,0.1,1)] object-cover" />
+              <img src={item.image} alt={item.title} width={900} height={900} decoding="async" className={`aspect-[4/3] w-full animate-[settle_1.8s_cubic-bezier(0.2,0.7,0.1,1)] ${item.id === 'lamp' ? 'object-cover' : 'object-contain'}`} />
             </div>
             <h3 className="wide mt-5 font-display text-[1.375rem] font-light uppercase md:text-[1.625rem]">{item.title}</h3>
             <p className="mt-2 text-body text-chalk/75">{item.body}</p>

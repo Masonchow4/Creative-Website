@@ -1,4 +1,7 @@
-export const productImage = `${import.meta.env.BASE_URL}media/atelier/google-embroidery.png`;
+export const productImage = `${import.meta.env.BASE_URL}media/relaunch/lava-lamp.png`;
+export const googleMark = `${import.meta.env.BASE_URL}media/relaunch/google-g-mark.png`;
+export const retroGoogleMark = `${import.meta.env.BASE_URL}media/relaunch/google-retro-mark.png`;
+export const colorPalette = `${import.meta.env.BASE_URL}media/relaunch/color-palette.png`;
 
 export const brand = {
   name: 'Google Lava Lamp Patch',
@@ -26,10 +29,10 @@ export const details = {
   eyebrow: 'The design',
   heading: 'A small patch with big lab energy.',
   items: [
-    {id: 'wordmark', label: '01', title: 'A familiar doodle', body: 'The bright Google wordmark brings playful color to a throwback patch, made for backpacks, jackets, and lab-day layers.', x: 50, y: 14, image: productImage},
-    {id: 'lamp', label: '02', title: 'Lava-lamp nostalgia', body: 'A wavy red lamp shape nods to classic science-room experiments and retro desk decor.', x: 50, y: 42, image: productImage},
-    {id: 'palette', label: '03', title: 'Color that stands out', body: 'Aqua, green, red, and yellow thread give this little science icon a bold, unmistakable pop.', x: 50, y: 69, image: productImage},
-    {id: 'thread', label: '04', title: 'Make it feel like you', body: 'The relaunch concept adds school or favorite colors and initials, so your patch can show your own corner of STEM.', x: 50, y: 88, image: productImage},
+    {id: 'wordmark', label: '01', title: 'A familiar mark', body: 'The Google G brings a familiar flash of color to a throwback science design for backpacks, jackets, and lab-day layers.', x: 50, y: 12, image: googleMark},
+    {id: 'lamp', label: '02', title: 'Lava-lamp nostalgia', body: 'A glowing red lamp brings the science-room classic to life and anchors the whole design.', x: 50, y: 34, image: productImage},
+    {id: 'palette', label: '03', title: 'Color that stands out', body: 'The retro Google lettering inspires a vivid palette that pops against everyday layers.', x: 50, y: 56, image: retroGoogleMark},
+    {id: 'thread', label: '04', title: 'Make it feel like you', body: 'Choose a color direction inspired by your school or favorite hues, then add initials in the relaunch concept.', x: 50, y: 82, image: colorPalette},
   ],
 };
 
@@ -48,7 +51,8 @@ export const atelier = {
   eyebrow: 'The relaunch offer',
   heading: ['Made for', 'the lab and beyond.'],
   steps: [
-    {n: 'GO', label: 'A doodle, reborn in thread', image: productImage, alt: 'Colorful embroidered lava-lamp patch beneath a Google wordmark.', portrait: true},
+    {n: '01', label: 'A glowing throwback for curious minds', image: productImage, alt: 'A red lava lamp glowing against a dark background.', contain: false, portrait: false},
+    {n: '02', label: 'A retro mark with a fresh point of view', image: retroGoogleMark, alt: 'A retro Google wordmark with a rainbow striped G.', contain: true, portrait: false},
   ],
 };
 
@@ -57,4 +61,5 @@ export const enquire = {
   heading: ['Choose your colors.', 'Add your initials.'],
   body: 'For high school and college STEM students aged 18–30 who want a retro science accessory with personality. Choose school colors or favorites, add initials, and get student pricing at relaunch.',
   palettes: ['Classic Google colors', 'School colors', 'Favorite colors'],
+  paletteImage: colorPalette,
 };
