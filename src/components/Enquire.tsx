@@ -76,6 +76,10 @@ export function Enquire() {
           </h2>
           <p className="mt-6 max-w-[26rem] text-body text-ink/70">{enquire.body}</p>
           <img src={enquire.paletteImage} alt="Color palette bands in coral, red, purple, and yellow tones." width={976} height={948} loading="lazy" decoding="async" className="mt-8 aspect-[2/1] w-full max-w-[26rem] rounded-sm object-cover" />
+          <figure className="mt-6 max-w-[16rem]">
+            <img src={enquire.signatureImage} alt="A handwritten signature-style sample, offered as personalization inspiration." width={589} height={342} loading="lazy" decoding="async" className="w-full mix-blend-multiply" />
+            <figcaption className="mt-2 font-mono text-[0.625rem] tracking-[0.12em] text-ink/50 uppercase">A personal mark, your way</figcaption>
+          </figure>
         </div>
 
         <form noValidate onSubmit={onSubmit} aria-describedby="enquire-status" className="space-y-5 md:col-span-6 md:col-start-7" data-reveal>

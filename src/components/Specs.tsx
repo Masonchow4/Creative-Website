@@ -175,6 +175,7 @@ export function Specs() {
             })}
           </ol>
           <p className="mt-6 font-mono text-[0.625rem] tracking-[0.14em] text-chalk/40 uppercase">{specs.note}</p>
+          <img src={specs.image} alt="STEM-themed banner with science and engineering icons." width={1014} height={530} loading="lazy" decoding="async" className="mt-7 w-full rounded-sm" />
         </div>
       </div>
     </section>

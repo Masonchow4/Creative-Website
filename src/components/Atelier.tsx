@@ -65,15 +65,15 @@ export function Atelier() {
             }}
             className={`relative ${s.portrait ? 'mx-auto w-full max-w-[26rem]' : i % 2 ? 'md:ml-[14vw]' : 'md:mr-[14vw]'}`}
           >
-            <div className={`relative overflow-hidden rounded-[6px] ${s.portrait ? 'aspect-[402/631]' : 'aspect-[16/10] md:aspect-[16/8.5]'}`}>
+            <div className={`relative overflow-hidden rounded-[6px] ${s.square ? 'aspect-square' : s.portrait ? 'aspect-[402/631]' : 'aspect-[16/10] md:aspect-[16/8.5]'}`}>
               <img
                 ref={(el) => {
                   if (el) imgRefs.current[i] = el;
                 }}
                 src={s.image}
                 alt={s.alt ?? ''}
-                width={s.portrait ? 402 : 1920}
-                height={s.portrait ? 631 : 1086}
+                width={s.square ? 607 : s.portrait ? 402 : 1920}
+                height={s.square ? 607 : s.portrait ? 631 : 1086}
                 loading="lazy"
                 decoding="async"
                 className={`size-full ${s.contain ? 'object-contain' : 'object-cover'} will-change-transform`}

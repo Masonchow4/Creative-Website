@@ -2,6 +2,9 @@ export const productImage = `${import.meta.env.BASE_URL}media/relaunch/lava-lamp
 export const googleMark = `${import.meta.env.BASE_URL}media/relaunch/google-g-mark.png`;
 export const retroGoogleMark = `${import.meta.env.BASE_URL}media/relaunch/google-retro-mark.png`;
 export const colorPalette = `${import.meta.env.BASE_URL}media/relaunch/color-palette.png`;
+export const signatureStyle = `${import.meta.env.BASE_URL}media/relaunch/signature-style.png`;
+export const stemCulture = `${import.meta.env.BASE_URL}media/relaunch/stem-culture.png`;
+export const youngScientist = `${import.meta.env.BASE_URL}media/relaunch/young-scientist.png`;
 
 export const brand = {
   name: 'Google Lava Lamp Patch',
@@ -40,6 +43,7 @@ export const specs = {
   eyebrow: 'The formula',
   heading: 'Your style, dialed in.',
   note: 'Student pricing planned for relaunch · color personalization concept · one curious mind at a time',
+  image: stemCulture,
   items: [
     {value: 3, decimals: 0, unit: 'WAYS', label: 'To make it yours'},
     {value: 18, decimals: 0, unit: '–30', label: 'Core student audience'},
@@ -51,8 +55,9 @@ export const atelier = {
   eyebrow: 'The relaunch offer',
   heading: ['Made for', 'the lab and beyond.'],
   steps: [
-    {n: '01', label: 'A glowing throwback for curious minds', image: productImage, alt: 'A red lava lamp glowing against a dark background.', contain: false, portrait: false},
-    {n: '02', label: 'A retro mark with a fresh point of view', image: retroGoogleMark, alt: 'A retro Google wordmark with a rainbow striped G.', contain: true, portrait: false},
+    {n: '01', label: 'A glowing throwback for curious minds', image: productImage, alt: 'A red lava lamp glowing against a dark background.', contain: false, portrait: false, square: false},
+    {n: '02', label: 'A retro mark with a fresh point of view', image: retroGoogleMark, alt: 'A retro Google wordmark with a rainbow striped G.', contain: true, portrait: false, square: false},
+    {n: '03', label: 'For curious minds and future discoveries', image: youngScientist, alt: 'A young student scientist exploring colorful experiments in a lab.', contain: false, portrait: false, square: true},
   ],
 };
 
@@ -62,4 +67,5 @@ export const enquire = {
   body: 'For high school and college STEM students aged 18–30 who want a retro science accessory with personality. Choose school colors or favorites, add initials, and get student pricing at relaunch.',
   palettes: ['Classic Google colors', 'School colors', 'Favorite colors'],
   paletteImage: colorPalette,
+  signatureImage: signatureStyle,
 };
